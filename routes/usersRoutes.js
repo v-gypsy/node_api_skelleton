@@ -6,6 +6,9 @@ const usersController = require("../controllers/usersController"),
     userRequestValidator = require("../validators/userValidator");
 
 
-router.post('/create', userRequestValidator.createUser, usersController.createUser)
+const authorization = require("../middlewares/authorization");
+
+
+router.post('/create', authorization, userRequestValidator.createUser, usersController.createUser)
 
 module.exports = router

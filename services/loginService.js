@@ -38,7 +38,8 @@ let userService = {
                 iat: Math.floor(Date.now() / 1000),
                 exp: Math.floor(Date.now() / 1000) + (60 * 15),
                 aud: "node-api-skelleton",
-                sub: user.users_pid
+                sub: user.users_pid,
+                users_id: user.users_pid
             }
 
             user.token = await helpers.generateJwtToken(tokenMetaData, process.env.JWT_SECRET)
