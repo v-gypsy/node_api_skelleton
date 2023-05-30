@@ -11,6 +11,19 @@ const userDataStoreService = {
                 reject(error)
             })
         });
+    },
+
+    fetchUser: function (reqData) {
+        return new Promise((resolve, reject) => {
+            return userModel.findOne({
+                where: reqData.condition,
+                raw: true
+            }).then(result => {
+                resolve(result)
+            }).catch(error => {
+                reject(error)
+            })
+        });
     }
 }
 

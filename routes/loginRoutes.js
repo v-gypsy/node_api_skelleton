@@ -6,6 +6,6 @@ const loginController = require("../controllers/loginController"),
     userRequestValidator = require("../validators/userValidator");
 
 
-router.post('/login', userRequestValidator.createUser, loginController.loginUser)
+router.post('/login', loginController.loginUser)
 
 module.exports = router

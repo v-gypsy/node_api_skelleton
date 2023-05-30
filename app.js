@@ -15,9 +15,12 @@ const express=require('express'),
 // import custom modules/pacakges here
 const responsehandler = require("./utils/responseHandler")
     dbconnection = require('./models/index'),
-    userRoutes = require("./routes/usersRoutes"),
     logger = require("./utils/logger"),
     rateLimit = require('./middlewares/rateLimit');
+
+// import all routes here..
+const userRoutes = require("./routes/usersRoutes"),
+    loginRoutes = require("./routes/loginRoutes")
 
 
 app.use(bodyParser.json({limit: '50mb'}));
@@ -68,16 +71,17 @@ app.use(morgan(format, {
 
 // routes part starts here...
 app.use('/user', userRoutes);
+app.use('/auth', loginRoutes)
 
 // no route found
 app.use(function(req, res, next) {
     res.setHeader('Content-Type','application/json');
-    res.status(404).send(JSON.stringify(responsehandler(0,404,"HTTP 404 No Resource Found")))
+    res.status(404).send(responsehandler(0,404,"HTTP 404 No Resource Found"))
 });
 
 app.use((err, req, res, next) => {
     console.error(err);
-    res.status(404).send(JSON.stringify(responsehandler(0, 500, "something went wrong!", err)))
+    res.status(err.httpCode).send(responsehandler(err.status, err.httpCode, err.message, err))
 })
 
 process.on('unhandledRejection', (reason, p) => { console.error(`unhandled rejection with reson ${reason} at ${p}`); });

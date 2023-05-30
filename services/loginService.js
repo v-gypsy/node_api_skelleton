@@ -5,23 +5,49 @@ const { generateRandomKey } = require("../utils/helpers"),
     userTransformer = require("../transformers/userTransformer");
 
 let userService = {
-    createUser: async function(req) {
+    loginUser: async function(req) {
         try {
             
             let reqData = {
-                users_pid: `us_${await generateRandomKey(25)}`,
-                name: req.body.name,
-                email: req.body.email,
-                password: await helpers.encryptPassword(req.body.password)
+                condition: {
+                    email: req.body.username
+                }
             }
     
-            let createUserResponse = await userDataStoreService.createUser(reqData);
-            let transformedUser = await userTransformer.createUserTransformer(createUserResponse)
+            let user = await userDataStoreService.fetchUser(reqData);
+            if (!user) {
+                throw {
+                    status: 0,
+                    httpCode: 400,
+                    message: "user not found with given username"
+                }
+            }
 
+            let passwordCheck = await helpers.decryptPassword(req.body.password, user.password) ? true : false;
+            if (!passwordCheck) {
+                throw {
+                    status: 0,
+                    httpCode: 400,
+                    message: "invalid password"
+                }
+            }
+
+            // generate JWT token here...
+            let tokenMetaData = {
+                iss: "node-api-skelleton",
+                iat: Math.floor(Date.now() / 1000),
+                exp: Math.floor(Date.now() / 1000) + (60 * 15),
+                aud: "node-api-skelleton",
+                sub: user.users_pid,
+                users_id: user.users_pid
+            }
+
+            user.token = await helpers.generateJwtToken(tokenMetaData, process.env.JWT_SECRET)
+            let transformedUser = userTransformer.userLoginTransformer(user)
             return transformedUser;
 
         } catch (error) {
-            return error;
+            throw error
         }
     }
 }

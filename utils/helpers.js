@@ -2,7 +2,8 @@
 const crypto = require('crypto');
 
 
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcrypt"),
+    jwt = require('jsonwebtoken');
 
 
 const ALPHA_NUM = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -11,6 +12,11 @@ module.exports = {
     encryptPassword: async (password) => {
         let encryptPassword = await bcrypt.hash(password, 10);
         return encryptPassword;
+    },
+
+    decryptPassword: async (data, hash) => {
+        let decryptedData = await bcrypt.compare(data, hash)
+        return decryptedData;
     },
 
     generateRandomKey: async (length) => {
@@ -34,5 +40,19 @@ module.exports = {
         }
 
         return clone;
+    },
+
+    generateJwtToken: async (data, secret) => {
+        return new Promise((resolve, reject) => {
+            console.log("here...")
+            jwt.sign(data, secret, (error, token) => {
+                if (error) {
+                    console.error(error)
+                    reject(error)
+                }
+
+                resolve(token)
+            })
+        });
     }
 }
