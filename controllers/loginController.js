@@ -2,10 +2,10 @@
 const moment = require("moment");
 
 const responseHandler = require("../utils/responseHandler"),
-    userService = require("../services/usersService"),
+    loginService = require("../services/loginService"),
     helpers = require("../utils/helpers");
 
-let usersController = {
+let loginController = {
     loginUser: async function (req, res, next) {
         try {
 
@@ -14,8 +14,8 @@ let usersController = {
                 should come here..
             */
 
-            let user = await userService.createUser(req);
-            res.status(200).send(responseHandler(1, 200, "User created successfully!", user))
+            let resp = await loginService.loginUser(req);
+            res.status(200).send(responseHandler(1, 200, "User authenticated successfully!", resp))
 
         } catch(error) {
             next(error)
@@ -23,4 +23,4 @@ let usersController = {
     }
 }
 
-module.exports = usersController
+module.exports = loginController
