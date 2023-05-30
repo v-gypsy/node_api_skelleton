@@ -24,6 +24,9 @@ module.exports = async (req, res, next) => {
             }
         }
 
+        // attaching users_id to req context so that it is accesible without db query
+        req.users_id = decode.users_id;
+
         next()
     } catch(error) {
         console.log(error)
