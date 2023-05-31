@@ -11,7 +11,8 @@ module.exports = {
 			},
 			users_pid: {
 				type: Sequelize.STRING,
-				allowNull: false
+				allowNull: false,
+				unique: true
 			},
 			name: {
 				type: Sequelize.STRING
