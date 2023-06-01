@@ -25,7 +25,8 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		users_pid: {
 			type: DataTypes.STRING,
-			allowNull: false
+			allowNull: false,
+			unique: true
 		},
 		name: {
 			allowNull: false,
