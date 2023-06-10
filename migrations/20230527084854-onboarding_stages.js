@@ -2,14 +2,14 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   	async up(queryInterface, Sequelize) {
-    	await queryInterface.createTable('Users', {
-			users_id: {
+    	await queryInterface.createTable('onboarding_stages', {
+			onboarding_stages_id: {
 				allowNull: false,
 				autoIncrement: true,
 				primaryKey: true,
-				type: Sequelize.INTEGER
+				type: Sequelize.BIGINT
 			},
-			users_pid: {
+			onboarding_stages_pid: {
 				type: Sequelize.STRING,
 				allowNull: false,
 				unique: true
@@ -17,10 +17,7 @@ module.exports = {
 			name: {
 				type: Sequelize.STRING
 			},
-			email: {
-				type: Sequelize.STRING
-			},
-			password: {
+			details: {
 				type: Sequelize.STRING
 			},
 			createdAt: {
@@ -34,6 +31,6 @@ module.exports = {
     	});
   	},
   	async down(queryInterface, Sequelize) {
-    	await queryInterface.dropTable('Users');
+    	await queryInterface.dropTable('onboarding_stages');
   	}
 };

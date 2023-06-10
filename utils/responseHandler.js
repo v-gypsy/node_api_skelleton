@@ -5,7 +5,7 @@
     messgae: any custom message or else default http text will be sent
     data: reslt / data bought from db or from anywhere else.
 */
-module.exports=function responsehandler(status, httpCode, message, data = null) {
+module.exports=function responsehandler(status, httpCode, message, data=null, req=null) {
 
     let response = {
         status: status,
@@ -78,6 +78,12 @@ module.exports=function responsehandler(status, httpCode, message, data = null) 
         response.statusText = "Invalid Status Code";
         response.message = "The status code rejected by the server.";
     }
+
+    /* 
+        call to function which will store the req and res data to db.
+        note: before saving the req and res remove sensitive data.    
+    */
+
 
     return response;
 };
